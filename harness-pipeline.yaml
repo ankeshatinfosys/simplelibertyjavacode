@@ -1,0 +1,20 @@
+pipeline:
+  name: Liberty Java Deployment
+  stages:
+    - name: Build
+      steps:
+        - name: Checkout Code
+          uses: harness/plugins/github-checkout
+        - name: Build Java App
+          uses: harness/plugins/maven-build
+        - name: Build Docker Image
+          uses: harness/plugins/docker-build
+          with:
+            image: myrepo/simple-java-liberty:latest
+    - name: Deploy
+      steps:
+        - name: Deploy to Kubernetes
+          uses: harness/plugins/kubernetes-deploy
+          with:
+            manifest: k8s/deployment.yaml
+
